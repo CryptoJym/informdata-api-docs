@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Endpoints Reference - InformData Connect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .endpoint-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .method-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .method-get { background: #dbeafe; color: #1e40af; }
+        .method-post { background: #d1fae5; color: #065f46; }
+        .method-put { background: #fef3c7; color: #92400e; }
+        .method-delete { background: #fee2e2; color: #991b1b; }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.125rem;
+            color: var(--text-primary);
+        }
+        
+        .param-section {
+            margin: 1.5rem 0;
+        }
+        
+        .param-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        
+        .param-item {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 0.375rem;
+        }
+        
+        .param-name {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .required-badge {
+            font-size: 0.75rem;
+            color: var(--danger-color);
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content" style="margin-left: 0; max-width: 1200px; margin: 0 auto;">
+        <div style="padding: 2rem;">
+            <h1><i class="fas fa-plug"></i> API Endpoints Reference</h1>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                Complete reference for all InformData Connect API endpoints
+            </p>
+
+            <!-- Authentication Endpoints -->
+            <section style="margin-bottom: 3rem;">
+                <h2><i class="fas fa-key"></i> Authentication Endpoints</h2>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="endpoint-path">/api/v1/authtoken</span>
+                    </div>
+                    <p>Get a new JWT authentication token</p>
+                    
+                    <div class="param-section">
+                        <h4>Request Body</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <span class="param-name">username<span class="required-badge">required</span></span>
+                                <span>Your API username</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">password<span class="required-badge">required</span></span>
+                                <span>Your API password</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="param-section">
+                        <h4>Response</h4>
+                        <pre><code class="language-json">{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 10800,
+  "tokenType": "Bearer"
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="endpoint-path">/api/v1/authtoken/refresh</span>
+                    </div>
+                    <p>Refresh an existing JWT token before expiration</p>
+                    
+                    <div class="param-section">
+                        <h4>Headers</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <span class="param-name">Authorization<span class="required-badge">required</span></span>
+                                <span>Bearer {current_jwt_token}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Order Endpoints -->
+            <section style="margin-bottom: 3rem;">
+                <h2><i class="fas fa-file-alt"></i> Order Endpoints</h2>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="endpoint-path">/api/v1/orders</span>
+                    </div>
+                    <p>Create a new screening order</p>
+                    
+                    <div class="param-section">
+                        <h4>Request Body</h4>
+                        <pre><code class="language-json">{
+  "order": {
+    "clientOrderId": "string",
+    "subject": {
+      "FirstName": "string",
+      "LastName": "string",
+      "Birthdate": "YYYY-MM-DD"
+    },
+    "product": {
+      "category": "PRODUCT_CATEGORY"
+      // Additional product-specific fields
+    },
+    "jurisdiction": {
+      "county": "string",
+      "state": "string",
+      "country": "string"
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/orders/{orderId}</span>
+                    </div>
+                    <p>Retrieve details for a specific order</p>
+                    
+                    <div class="param-section">
+                        <h4>Path Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <span class="param-name">orderId<span class="required-badge">required</span></span>
+                                <span>The InformData order ID</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/orders</span>
+                    </div>
+                    <p>List orders with optional filters</p>
+                    
+                    <div class="param-section">
+                        <h4>Query Parameters</h4>
+                        <div class="param-grid">
+                            <div class="param-item">
+                                <span class="param-name">status</span>
+                                <span>Filter by order status (COMPLETE, IN_PROGRESS, etc.)</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">clientOrderId</span>
+                                <span>Filter by your client order ID</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">startDate</span>
+                                <span>Orders created after this date (ISO 8601)</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">endDate</span>
+                                <span>Orders created before this date (ISO 8601)</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">limit</span>
+                                <span>Maximum number of results (default: 100)</span>
+                            </div>
+                            <div class="param-item">
+                                <span class="param-name">offset</span>
+                                <span>Pagination offset (default: 0)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-put">PUT</span>
+                        <span class="endpoint-path">/api/v1/orders/{orderId}</span>
+                    </div>
+                    <p>Update an existing order (limited fields)</p>
+                    
+                    <div class="param-section">
+                        <h4>Updatable Fields</h4>
+                        <ul>
+                            <li>Subject contact information</li>
+                            <li>Custom fields</li>
+                            <li>Subscriber notifications</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-delete">DELETE</span>
+                        <span class="endpoint-path">/api/v1/orders/{orderId}</span>
+                    </div>
+                    <p>Cancel an order (if not yet completed)</p>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Orders can only be cancelled if they are in CREATED or IN_PROGRESS status</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Webhook Endpoints -->
+            <section style="margin-bottom: 3rem;">
+                <h2><i class="fas fa-bell"></i> Webhook Endpoints</h2>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-post">POST</span>
+                        <span class="endpoint-path">/api/v1/events/subscriptions</span>
+                    </div>
+                    <p>Create a new webhook subscription</p>
+                    
+                    <div class="param-section">
+                        <h4>Request Body</h4>
+                        <pre><code class="language-json">{
+  "url": "https://your-domain.com/webhook",
+  "events": [
+    "order.completed",
+    "order.status.changed",
+    "order.created"
+  ],
+  "secret": "your_webhook_secret",
+  "active": true
+}</code></pre>
+                    </div>
+                    
+                    <div class="param-section">
+                        <h4>Available Events</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Event</th>
+                                    <th>Description</th>
+                                    <th>Payload</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>order.created</code></td>
+                                    <td>New order created</td>
+                                    <td>Order ID, status</td>
+                                </tr>
+                                <tr>
+                                    <td><code>order.status.changed</code></td>
+                                    <td>Order status updated</td>
+                                    <td>Order ID, old status, new status</td>
+                                </tr>
+                                <tr>
+                                    <td><code>order.completed</code></td>
+                                    <td>Order processing complete</td>
+                                    <td>Full order details</td>
+                                </tr>
+                                <tr>
+                                    <td><code>order.updated</code></td>
+                                    <td>Order information modified</td>
+                                    <td>Order ID, changed fields</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-get">GET</span>
+                        <span class="endpoint-path">/api/v1/events/subscriptions</span>
+                    </div>
+                    <p>List all webhook subscriptions</p>
+                </div>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge method-delete">DELETE</span>
+                        <span class="endpoint-path">/api/v1/events/subscriptions/{subscriptionId}</span>
+                    </div>
+                    <p>Delete a webhook subscription</p>
+                </div>
+            </section>
+
+            <!-- Rate Limits -->
+            <section style="margin-bottom: 3rem;">
+                <h2><i class="fas fa-tachometer-alt"></i> Rate Limits</h2>
+                
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <h4>API Rate Limits</h4>
+                        <ul style="margin: 0.5rem 0;">
+                            <li>Authentication endpoints: 10 requests per minute</li>
+                            <li>Order creation: 100 requests per minute</li>
+                            <li>Order queries: 500 requests per minute</li>
+                            <li>Webhook management: 50 requests per minute</li>
+                        </ul>
+                        <p style="margin-top: 0.5rem;">Rate limit information is included in response headers: <code>X-RateLimit-Limit</code>, <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div style="display: flex; justify-content: space-between; margin-top: 3rem;">
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Main Documentation
+                </a>
+                <a href="index.html#api-playground" class="btn-primary">
+                    Try API Playground <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+</body>
+</html>

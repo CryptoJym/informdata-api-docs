@@ -1,0 +1,27 @@
+{
+  "name": "informdata-api-docs",
+  "version": "1.0.0",
+  "description": "InformData Connect API Documentation Website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build required for static site'",
+    "deploy": "vercel --prod",
+    "preview": "vercel"
+  },
+  "keywords": [
+    "api",
+    "documentation",
+    "informdata",
+    "background-screening",
+    "rest-api"
+  ],
+  "author": "InformData",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

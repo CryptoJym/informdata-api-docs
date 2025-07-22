@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InformData Connect API Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2><i class="fas fa-database"></i> InformData API</h2>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#overview" class="nav-link active"><i class="fas fa-home"></i> Overview</a></li>
+            <li><a href="#authentication" class="nav-link"><i class="fas fa-key"></i> Authentication</a></li>
+            <li><a href="#quick-start" class="nav-link"><i class="fas fa-rocket"></i> Quick Start</a></li>
+            <li class="nav-section">
+                <a href="#endpoints" class="nav-link section-header"><i class="fas fa-plug"></i> API Endpoints</a>
+                <ul class="sub-menu">
+                    <li><a href="#endpoints-auth" class="nav-link">Authentication</a></li>
+                    <li><a href="#endpoints-orders" class="nav-link">Orders</a></li>
+                    <li><a href="#endpoints-webhooks" class="nav-link">Webhooks</a></li>
+                </ul>
+            </li>
+            <li class="nav-section">
+                <a href="#products" class="nav-link section-header"><i class="fas fa-box"></i> Product Categories</a>
+                <ul class="sub-menu">
+                    <li><a href="#criminal-checks" class="nav-link">Criminal Checks</a></li>
+                    <li><a href="#verification-services" class="nav-link">Verification Services</a></li>
+                    <li><a href="#database-searches" class="nav-link">Database Searches</a></li>
+                    <li><a href="#financial-civil" class="nav-link">Financial & Civil</a></li>
+                    <li><a href="#other-services" class="nav-link">Other Services</a></li>
+                </ul>
+            </li>
+            <li><a href="#responses" class="nav-link"><i class="fas fa-reply"></i> Response Handling</a></li>
+            <li><a href="#webhooks" class="nav-link"><i class="fas fa-bell"></i> Webhooks</a></li>
+            <li><a href="#errors" class="nav-link"><i class="fas fa-exclamation-triangle"></i> Error Handling</a></li>
+            <li><a href="#best-practices" class="nav-link"><i class="fas fa-star"></i> Best Practices</a></li>
+            <li><a href="#api-playground" class="nav-link"><i class="fas fa-play"></i> API Playground</a></li>
+            <li><a href="#resources" class="nav-link"><i class="fas fa-book"></i> Resources</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <!-- Overview Section -->
+        <section id="overview" class="content-section active">
+            <h1>InformData Connect API Documentation</h1>
+            <div class="intro-card">
+                <p>Welcome to the InformData Connect API documentation. This comprehensive guide will help you integrate background screening and verification services into your applications.</p>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>40+ Product Categories</h3>
+                        <p>Criminal, civil, verification, and financial screening services</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Real-time Updates</h3>
+                        <p>Webhook notifications for instant status updates</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-lock"></i>
+                        <h3>Secure JWT Auth</h3>
+                        <p>Industry-standard authentication with 3-hour token lifecycle</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-code"></i>
+                        <h3>RESTful API</h3>
+                        <p>Simple JSON-based requests and responses</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quick-links">
+                <h2>Quick Navigation</h2>
+                <div class="link-grid">
+                    <a href="#quick-start" class="quick-link-card">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Get Started</span>
+                    </a>
+                    <a href="#criminal-checks" class="quick-link-card">
+                        <i class="fas fa-gavel"></i>
+                        <span>Criminal Checks</span>
+                    </a>
+                    <a href="#verification-services" class="quick-link-card">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verifications</span>
+                    </a>
+                    <a href="#api-playground" class="quick-link-card">
+                        <i class="fas fa-terminal"></i>
+                        <span>Try It Now</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Authentication Section -->
+        <section id="authentication" class="content-section">
+            <h1><i class="fas fa-key"></i> Authentication</h1>
+            
+            <div class="auth-overview">
+                <p>The InformData Connect API uses JWT (JSON Web Token) authentication. All API requests must include a valid JWT token in the Authorization header.</p>
+                
+                <div class="auth-flow">
+                    <h2>Authentication Flow</h2>
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <span class="step-number">1</span>
+                            <h4>Get Token</h4>
+                            <p>POST credentials to /api/v1/authtoken</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">2</span>
+                            <h4>Receive JWT</h4>
+                            <p>Valid for 3 hours</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">3</span>
+                            <h4>Make Requests</h4>
+                            <p>Include token in headers</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <span class="step-number">4</span>
+                            <h4>Refresh Token</h4>
+                            <p>Before expiration</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h3>Get Authentication Token</h3>
+                <div class="code-tabs">
+                    <button class="tab-button active" data-tab="curl-auth">cURL</button>
+                    <button class="tab-button" data-tab="js-auth">JavaScript</button>
+                    <button class="tab-button" data-tab="python-auth">Python</button>
+                </div>
+                
+                <div class="tab-content active" id="curl-auth">
+                    <pre><code class="language-bash">curl -X POST https://api.informdata.com/api/v1/authtoken \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "your_username",
+    "password": "your_password"
+  }'</code></pre>
+                </div>
+                
+                <div class="tab-content" id="js-auth">
+                    <pre><code class="language-javascript">const response = await fetch('https://api.informdata.com/api/v1/authtoken', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    username: 'your_username',
+    password: 'your_password'
+  })
+});
+
+const { token } = await response.json();
+console.log('JWT Token:', token);</code></pre>
+                </div>
+                
+                <div class="tab-content" id="python-auth">
+                    <pre><code class="language-python">import requests
+
+response = requests.post(
+    'https://api.informdata.com/api/v1/authtoken',
+    json={
+        'username': 'your_username',
+        'password': 'your_password'
+    }
+)
+
+token = response.json()['token']
+print(f'JWT Token: {token}')</code></pre>
+                </div>
+            </div>
+
+            <div class="response-example">
+                <h3>Response</h3>
+                <pre><code class="language-json">{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiresIn": 10800,
+  "tokenType": "Bearer"
+}</code></pre>
+            </div>
+
+            <div class="info-box">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <h4>Token Expiration</h4>
+                    <p>JWT tokens expire after 3 hours (10,800 seconds). Implement token refresh logic to maintain uninterrupted access.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section id="quick-start" class="content-section">
+            <h1><i class="fas fa-rocket"></i> Quick Start Guide</h1>
+            
+            <div class="steps-container">
+                <h2>Get Started in 4 Steps</h2>
+                
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-badge">Step 1</span>
+                        <h3>Authenticate</h3>
+                    </div>
+                    <p>Get your JWT token using your credentials</p>
+                    <pre><code class="language-bash">POST /api/v1/authtoken
+{
+  "username": "your_username",
+  "password": "your_password"
+}</code></pre>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-badge">Step 2</span>
+                        <h3>Create an Order</h3>
+                    </div>
+                    <p>Submit a background check request</p>
+                    <pre><code class="language-bash">POST /api/v1/orders
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "order": {
+    "clientOrderId": "YOUR_ORDER_123",
+    "subject": {
+      "FirstName": "John",
+      "LastName": "Doe",
+      "Birthdate": "1990-01-01"
+    },
+    "product": {
+      "category": "CRIMINAL"
+    },
+    "jurisdiction": {
+      "county": "King",
+      "state": "WA",
+      "country": "United States"
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-badge">Step 3</span>
+                        <h3>Monitor Status</h3>
+                    </div>
+                    <p>Check order status or set up webhooks</p>
+                    <pre><code class="language-bash">GET /api/v1/orders/{orderId}
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <span class="step-badge">Step 4</span>
+                        <h3>Retrieve Results</h3>
+                    </div>
+                    <p>Get complete screening results</p>
+                    <pre><code class="language-json">{
+  "order": {
+    "id": "order_id",
+    "status": "COMPLETE",
+    "substatus": "CLEAR",
+    "cases": []
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="try-it-section">
+                <h2>Try Your First Request</h2>
+                <div class="interactive-demo">
+                    <div class="demo-input">
+                        <label>Your API Token:</label>
+                        <input type="text" id="demo-token" placeholder="Paste your JWT token here">
+                        
+                        <label>Subject Information:</label>
+                        <input type="text" id="demo-firstname" placeholder="First Name">
+                        <input type="text" id="demo-lastname" placeholder="Last Name">
+                        <input type="date" id="demo-birthdate">
+                        
+                        <button class="btn-primary" onclick="sendDemoRequest()">
+                            <i class="fas fa-paper-plane"></i> Send Test Request
+                        </button>
+                    </div>
+                    <div class="demo-output">
+                        <h4>Request Preview:</h4>
+                        <pre id="demo-request"><code class="language-json">// Your request will appear here</code></pre>
+                        
+                        <h4>Response:</h4>
+                        <pre id="demo-response"><code class="language-json">// Response will appear here</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Criminal Checks Section -->
+        <section id="criminal-checks" class="content-section">
+            <h1><i class="fas fa-gavel"></i> Criminal Background Checks</h1>
+            
+            <div class="product-overview">
+                <p>Criminal background checks search court records to identify any criminal history. We offer multiple types of criminal searches to meet your screening needs.</p>
+            </div>
+
+            <div class="product-types">
+                <h2>Available Criminal Check Types</h2>
+                
+                <div class="product-card-detailed">
+                    <h3><i class="fas fa-map-marker-alt"></i> County Criminal (CRIMINAL)</h3>
+                    <p>Search criminal records at the county courthouse level. Most thorough and accurate for specific jurisdictions.</p>
+                    
+                    <div class="parameters-section">
+                        <h4>Configuration Parameters:</h4>
+                        <table class="param-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Type</th>
+                                    <th>Values</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>felonyYears</code></td>
+                                    <td>integer</td>
+                                    <td>1-10</td>
+                                    <td>Years to search for felony records</td>
+                                </tr>
+                                <tr>
+                                    <td><code>felonyScope</code></td>
+                                    <td>string</td>
+                                    <td>STRICT_SCOPE, EXTENDED_SCOPE, BROAD_SCOPE</td>
+                                    <td>Geographic scope for felony search</td>
+                                </tr>
+                                <tr>
+                                    <td><code>misdemeanorYears</code></td>
+                                    <td>integer</td>
+                                    <td>1-10</td>
+                                    <td>Years to search for misdemeanor records</td>
+                                </tr>
+                                <tr>
+                                    <td><code>misdemeanorScope</code></td>
+                                    <td>string</td>
+                                    <td>STRICT_SCOPE, EXTENDED_SCOPE, BROAD_SCOPE</td>
+                                    <td>Geographic scope for misdemeanor search</td>
+                                </tr>
+                                <tr>
+                                    <td><code>trafficLevel</code></td>
+                                    <td>string</td>
+                                    <td>NO_TRAFFIC, TRAFFIC_MISDEMEANORS_ONLY, ALL_TRAFFIC</td>
+                                    <td>Include traffic violations</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="example-section">
+                        <h4>Example Request:</h4>
+                        <pre><code class="language-json">{
+  "order": {
+    "clientOrderId": "CRIM-2024-001",
+    "subject": {
+      "FirstName": "John",
+      "LastName": "Doe",
+      "Birthdate": "1990-01-01"
+    },
+    "product": {
+      "category": "CRIMINAL",
+      "felonyYears": 7,
+      "felonyScope": "STRICT_SCOPE",
+      "misdemeanorYears": 7,
+      "misdemeanorScope": "STRICT_SCOPE",
+      "trafficYears": 7,
+      "trafficScope": "STRICT_SCOPE",
+      "trafficLevel": "TRAFFIC_MISDEMEANORS_ONLY"
+    },
+    "jurisdiction": {
+      "county": "King",
+      "state": "WA",
+      "country": "United States"
+    }
+  }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="product-card-detailed">
+                    <h3><i class="fas fa-balance-scale"></i> Federal Criminal (CRIMINAL_FEDERAL)</h3>
+                    <p>Search federal district court records for federal crimes across all US federal jurisdictions.</p>
+                    
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Federal searches cover crimes prosecuted at the federal level, including interstate crimes, federal tax violations, and crimes on federal property.</p>
+                    </div>
+                </div>
+
+                <div class="product-card-detailed">
+                    <h3><i class="fas fa-globe"></i> National Criminal Database (NATCRIM)</h3>
+                    <p>Instant search across a multi-jurisdictional database. Good for identifying potential records that need county-level verification.</p>
+                    
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Database searches should be supplemented with county-level searches for complete due diligence.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="response-handling">
+                <h2>Understanding Criminal Check Responses</h2>
+                
+                <div class="status-grid">
+                    <div class="status-card clear">
+                        <h4><i class="fas fa-check-circle"></i> CLEAR</h4>
+                        <p>No criminal records found</p>
+                    </div>
+                    <div class="status-card record">
+                        <h4><i class="fas fa-exclamation-circle"></i> RECORD</h4>
+                        <p>Criminal records found - review case details</p>
+                    </div>
+                    <div class="status-card possible">
+                        <h4><i class="fas fa-question-circle"></i> POSSIBLE_RECORD</h4>
+                        <p>Potential match requires additional review</p>
+                    </div>
+                </div>
+
+                <div class="response-structure">
+                    <h3>Criminal Record Response Structure</h3>
+                    <pre><code class="language-json">{
+  "order": {
+    "status": "COMPLETE",
+    "substatus": "RECORD",
+    "cases": [{
+      "caseNumber": "2015-CR-12345",
+      "courtFiledIn": "KING COUNTY SUPERIOR COURT",
+      "chargeDate": "2015-06-15",
+      "charges": [{
+        "chargeDescription": "THEFT 3RD DEGREE",
+        "chargeType": "MISDEMEANOR",
+        "disposition": "GUILTY",
+        "dispositionDate": "2015-08-20",
+        "sentence": {
+          "hasProbation": true,
+          "probationMonths": 12,
+          "hasFine": true,
+          "fineAmount": 500.00
+        }
+      }]
+    }]
+  }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Verification Services Section -->
+        <section id="verification-services" class="content-section">
+            <h1><i class="fas fa-check-circle"></i> Verification Services</h1>
+            
+            <div class="verification-grid">
+                <div class="verification-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Employment Verification</h3>
+                    <p>Verify past and current employment history</p>
+                    <button class="btn-secondary" onclick="showVerificationDetails('employment')">View Details</button>
+                </div>
+                
+                <div class="verification-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>Education Verification</h3>
+                    <p>Confirm degrees and educational credentials</p>
+                    <button class="btn-secondary" onclick="showVerificationDetails('education')">View Details</button>
+                </div>
+                
+                <div class="verification-card">
+                    <i class="fas fa-home"></i>
+                    <h3>Address Verification</h3>
+                    <p>Validate current and previous addresses</p>
+                    <button class="btn-secondary" onclick="showVerificationDetails('address')">View Details</button>
+                </div>
+                
+                <div class="verification-card">
+                    <i class="fas fa-id-card"></i>
+                    <h3>License Verification</h3>
+                    <p>Verify professional licenses and certifications</p>
+                    <button class="btn-secondary" onclick="showVerificationDetails('license')">View Details</button>
+                </div>
+            </div>
+
+            <div id="verification-details" class="verification-details">
+                <!-- Details will be loaded here dynamically -->
+            </div>
+        </section>
+
+        <!-- API Playground Section -->
+        <section id="api-playground" class="content-section">
+            <h1><i class="fas fa-play"></i> API Playground</h1>
+            
+            <div class="playground-container">
+                <div class="playground-controls">
+                    <h3>Build Your Request</h3>
+                    
+                    <div class="control-group">
+                        <label>Product Category:</label>
+                        <select id="playground-category" onchange="updatePlaygroundTemplate()">
+                            <option value="CRIMINAL">Criminal Background Check</option>
+                            <option value="EMPLOYMENT_VERIFICATION">Employment Verification</option>
+                            <option value="SSN_TRACE">SSN Trace</option>
+                            <option value="NATCRIM">National Criminal Database</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label>Subject Information:</label>
+                        <input type="text" id="pg-firstname" placeholder="First Name">
+                        <input type="text" id="pg-lastname" placeholder="Last Name">
+                        <input type="date" id="pg-birthdate">
+                    </div>
+                    
+                    <div id="category-specific-fields">
+                        <!-- Dynamic fields based on category -->
+                    </div>
+                    
+                    <button class="btn-primary" onclick="executePlaygroundRequest()">
+                        <i class="fas fa-play"></i> Execute Request
+                    </button>
+                </div>
+                
+                <div class="playground-output">
+                    <div class="output-section">
+                        <h4>Generated Request:</h4>
+                        <pre id="playground-request"><code class="language-json">// Select options to generate request</code></pre>
+                    </div>
+                    
+                    <div class="output-section">
+                        <h4>Mock Response:</h4>
+                        <pre id="playground-response"><code class="language-json">// Execute request to see mock response</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Resources Section -->
+        <section id="resources" class="content-section">
+            <h1><i class="fas fa-book"></i> Additional Resources</h1>
+            
+            <div class="resource-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <a href="endpoints-detail.html" class="resource-card" style="text-decoration: none;">
+                    <div style="background: white; padding: 2rem; border-radius: 0.75rem; box-shadow: var(--shadow); transition: transform 0.2s;">
+                        <i class="fas fa-plug" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; display: block;"></i>
+                        <h3 style="color: var(--text-primary);">Complete Endpoints Reference</h3>
+                        <p style="color: var(--text-secondary);">Detailed documentation for all API endpoints with examples</p>
+                    </div>
+                </a>
+                
+                <a href="product-catalog.html" class="resource-card" style="text-decoration: none;">
+                    <div style="background: white; padding: 2rem; border-radius: 0.75rem; box-shadow: var(--shadow); transition: transform 0.2s;">
+                        <i class="fas fa-box" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; display: block;"></i>
+                        <h3 style="color: var(--text-primary);">Product Catalog</h3>
+                        <p style="color: var(--text-secondary);">Browse all 40+ screening products with detailed specifications</p>
+                    </div>
+                </a>
+                
+                <a href="error-reference.html" class="resource-card" style="text-decoration: none;">
+                    <div style="background: white; padding: 2rem; border-radius: 0.75rem; box-shadow: var(--shadow); transition: transform 0.2s;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; display: block;"></i>
+                        <h3 style="color: var(--text-primary);">Error Reference Guide</h3>
+                        <p style="color: var(--text-secondary);">Comprehensive error codes and troubleshooting guide</p>
+                    </div>
+                </a>
+            </div>
+            
+            <style>
+                .resource-card:hover > div {
+                    transform: translateY(-4px);
+                    box-shadow: var(--shadow-lg);
+                }
+            </style>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

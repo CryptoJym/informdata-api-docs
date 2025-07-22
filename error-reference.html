@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Reference & Status Codes - InformData Connect API</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .error-category {
+            margin-bottom: 3rem;
+        }
+        
+        .error-card {
+            background: white;
+            border-left: 4px solid;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .error-2xx { border-left-color: var(--secondary-color); }
+        .error-4xx { border-left-color: var(--accent-color); }
+        .error-5xx { border-left-color: var(--danger-color); }
+        
+        .status-code {
+            display: inline-block;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.125rem;
+            margin-right: 1rem;
+        }
+        
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .status-item {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .status-item.success { border-color: var(--secondary-color); background: #d1fae5; }
+        .status-item.warning { border-color: var(--accent-color); background: #fef3c7; }
+        .status-item.error { border-color: var(--danger-color); background: #fee2e2; }
+        
+        .troubleshooting-steps {
+            background: var(--light-bg);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .troubleshooting-steps ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .error-example {
+            background: #1e293b;
+            color: #ff6b6b;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content" style="margin-left: 0; max-width: 1200px; margin: 0 auto;">
+        <div style="padding: 2rem;">
+            <h1><i class="fas fa-exclamation-triangle"></i> Error Reference & Status Codes</h1>
+            <p style="font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                Comprehensive guide to API error codes, status messages, and troubleshooting
+            </p>
+
+            <!-- HTTP Status Codes -->
+            <section class="error-category">
+                <h2><i class="fas fa-server"></i> HTTP Status Codes</h2>
+                
+                <h3 style="color: var(--secondary-color);">Success Codes (2xx)</h3>
+                <div class="error-card error-2xx">
+                    <span class="status-code">200 OK</span>
+                    <strong>Request Successful</strong>
+                    <p>The request was successful and the response contains the requested data.</p>
+                    <pre><code class="language-json">{
+  "order": {
+    "id": "order_123",
+    "status": "COMPLETE"
+    // ... order data
+  }
+}</code></pre>
+                </div>
+                
+                <div class="error-card error-2xx">
+                    <span class="status-code">201 Created</span>
+                    <strong>Resource Created</strong>
+                    <p>A new resource was successfully created (e.g., new order, webhook subscription).</p>
+                </div>
+                
+                <div class="error-card error-2xx">
+                    <span class="status-code">204 No Content</span>
+                    <strong>Success with No Response Body</strong>
+                    <p>The request was successful but there's no content to return (e.g., DELETE operations).</p>
+                </div>
+
+                <h3 style="color: var(--accent-color); margin-top: 2rem;">Client Error Codes (4xx)</h3>
+                <div class="error-card error-4xx">
+                    <span class="status-code">400 Bad Request</span>
+                    <strong>Invalid Request Data</strong>
+                    <p>The request contains invalid data or is missing required fields.</p>
+                    <div class="error-example">
+{
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "Invalid request data",
+    "details": {
+      "field": "subject.Birthdate",
+      "error": "Invalid date format. Expected: YYYY-MM-DD"
+    }
+  }
+}</div>
+                    <div class="troubleshooting-steps">
+                        <h4>Common Causes & Solutions:</h4>
+                        <ol>
+                            <li>Missing required fields → Check API documentation for required fields</li>
+                            <li>Invalid date format → Use ISO 8601 format (YYYY-MM-DD)</li>
+                            <li>Invalid product category → Verify category name is spelled correctly</li>
+                            <li>Invalid jurisdiction → Ensure state uses 2-letter code</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="error-card error-4xx">
+                    <span class="status-code">401 Unauthorized</span>
+                    <strong>Authentication Failed</strong>
+                    <p>Missing, invalid, or expired authentication token.</p>
+                    <div class="error-example">
+{
+  "error": {
+    "code": "UNAUTHORIZED",
+    "message": "Invalid or expired authentication token"
+  }
+}</div>
+                    <div class="troubleshooting-steps">
+                        <h4>Solutions:</h4>
+                        <ol>
+                            <li>Ensure Authorization header is included: <code>Bearer YOUR_TOKEN</code></li>
+                            <li>Check if token has expired (3-hour lifetime)</li>
+                            <li>Refresh token using <code>/api/v1/authtoken/refresh</code></li>
+                            <li>Verify credentials and get new token</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="error-card error-4xx">
+                    <span class="status-code">403 Forbidden</span>
+                    <strong>Access Denied</strong>
+                    <p>You don't have permission to access this resource.</p>
+                    <div class="troubleshooting-steps">
+                        <h4>Possible Reasons:</h4>
+                        <ul>
+                            <li>Trying to access another client's order</li>
+                            <li>Insufficient permissions for requested product</li>
+                            <li>Account restrictions or suspension</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="error-card error-4xx">
+                    <span class="status-code">404 Not Found</span>
+                    <strong>Resource Not Found</strong>
+                    <p>The requested resource doesn't exist.</p>
+                    <div class="error-example">
+{
+  "error": {
+    "code": "NOT_FOUND",
+    "message": "Order not found",
+    "details": {
+      "orderId": "order_xyz123"
+    }
+  }
+}</div>
+                </div>
+                
+                <div class="error-card error-4xx">
+                    <span class="status-code">429 Too Many Requests</span>
+                    <strong>Rate Limit Exceeded</strong>
+                    <p>You've exceeded the API rate limits.</p>
+                    <div class="error-example">
+{
+  "error": {
+    "code": "RATE_LIMITED",
+    "message": "Rate limit exceeded",
+    "details": {
+      "limit": 100,
+      "remaining": 0,
+      "resetAt": "2024-01-15T12:00:00Z"
+    }
+  }
+}</div>
+                    <div class="info-box">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <p>Check response headers for rate limit information:</p>
+                            <ul style="margin: 0.5rem 0;">
+                                <li><code>X-RateLimit-Limit</code> - Requests allowed per window</li>
+                                <li><code>X-RateLimit-Remaining</code> - Requests remaining</li>
+                                <li><code>X-RateLimit-Reset</code> - When limit resets (Unix timestamp)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="color: var(--danger-color); margin-top: 2rem;">Server Error Codes (5xx)</h3>
+                <div class="error-card error-5xx">
+                    <span class="status-code">500 Internal Server Error</span>
+                    <strong>Server Error</strong>
+                    <p>An unexpected error occurred on the server.</p>
+                    <div class="troubleshooting-steps">
+                        <h4>What to do:</h4>
+                        <ol>
+                            <li>Retry the request after a brief delay</li>
+                            <li>If error persists, contact support with request ID</li>
+                            <li>Check API status page for known issues</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="error-card error-5xx">
+                    <span class="status-code">503 Service Unavailable</span>
+                    <strong>Service Temporarily Unavailable</strong>
+                    <p>The service is temporarily unavailable due to maintenance or overload.</p>
+                </div>
+            </section>
+
+            <!-- Order Status Values -->
+            <section class="error-category">
+                <h2><i class="fas fa-tasks"></i> Order Status Reference</h2>
+                
+                <h3>Primary Status Values</h3>
+                <div class="status-grid">
+                    <div class="status-item">
+                        <i class="fas fa-plus-circle" style="font-size: 2rem; color: #6b7280;"></i>
+                        <h4>CREATED</h4>
+                        <p>Order received and validated</p>
+                    </div>
+                    <div class="status-item warning">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--accent-color);"></i>
+                        <h4>IN_PROGRESS</h4>
+                        <p>Order is being processed</p>
+                    </div>
+                    <div class="status-item success">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--secondary-color);"></i>
+                        <h4>COMPLETE</h4>
+                        <p>Processing finished successfully</p>
+                    </div>
+                    <div class="status-item warning">
+                        <i class="fas fa-pause-circle" style="font-size: 2rem; color: var(--accent-color);"></i>
+                        <h4>ON_HOLD</h4>
+                        <p>Requires additional information</p>
+                    </div>
+                    <div class="status-item error">
+                        <i class="fas fa-times-circle" style="font-size: 2rem; color: var(--danger-color);"></i>
+                        <h4>CANCELLED</h4>
+                        <p>Order was cancelled</p>
+                    </div>
+                </div>
+
+                <h3>Substatus Values by Product Type</h3>
+                
+                <h4>Criminal & Civil Searches</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Substatus</th>
+                            <th>Meaning</th>
+                            <th>Action Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>CLEAR</code></td>
+                            <td>No records found</td>
+                            <td>None - search complete</td>
+                        </tr>
+                        <tr>
+                            <td><code>RECORD</code></td>
+                            <td>Records found</td>
+                            <td>Review case details in response</td>
+                        </tr>
+                        <tr>
+                            <td><code>POSSIBLE_RECORD</code></td>
+                            <td>Potential match needs verification</td>
+                            <td>May require additional identifiers</td>
+                        </tr>
+                        <tr>
+                            <td><code>UNABLE_TO_COMPLETE</code></td>
+                            <td>Search could not be completed</td>
+                            <td>Check activity notes for details</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Verification Services</h4>
+                <table class="param-table">
+                    <thead>
+                        <tr>
+                            <th>Substatus</th>
+                            <th>Meaning</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>VERIFIED_SUCCESS</code></td>
+                            <td>Information verified as accurate</td>
+                            <td>All provided data matches</td>
+                        </tr>
+                        <tr>
+                            <td><code>VERIFIED_FAILURE</code></td>
+                            <td>Information does not match</td>
+                            <td>Discrepancies found - check details</td>
+                        </tr>
+                        <tr>
+                            <td><code>UNABLE_TO_VERIFY</code></td>
+                            <td>Could not complete verification</td>
+                            <td>Source unavailable or unresponsive</td>
+                        </tr>
+                        <tr>
+                            <td><code>PARTIALLY_VERIFIED</code></td>
+                            <td>Some information verified</td>
+                            <td>Check individual field results</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Common Error Scenarios -->
+            <section class="error-category">
+                <h2><i class="fas fa-tools"></i> Common Error Scenarios & Solutions</h2>
+                
+                <div class="troubleshooting-steps">
+                    <h3>Scenario: Order Stuck in IN_PROGRESS</h3>
+                    <p><strong>Symptoms:</strong> Order remains in IN_PROGRESS status longer than expected</p>
+                    <h4>Solutions:</h4>
+                    <ol>
+                        <li>Check the <code>activity</code> array for status updates</li>
+                        <li>Look for ON_HOLD substatus requiring action</li>
+                        <li>Verify jurisdiction is accessible (some courts have delays)</li>
+                        <li>Contact support if no updates after expected timeframe</li>
+                    </ol>
+                </div>
+                
+                <div class="troubleshooting-steps">
+                    <h3>Scenario: Webhook Not Receiving Events</h3>
+                    <p><strong>Symptoms:</strong> Webhook endpoint not receiving notifications</p>
+                    <h4>Troubleshooting Steps:</h4>
+                    <ol>
+                        <li>Verify webhook URL is publicly accessible</li>
+                        <li>Check webhook returns 200 status code</li>
+                        <li>Ensure SSL certificate is valid (HTTPS required)</li>
+                        <li>Test with webhook testing service</li>
+                        <li>Check webhook subscription is active</li>
+                    </ol>
+                </div>
+                
+                <div class="troubleshooting-steps">
+                    <h3>Scenario: Unexpected UNABLE_TO_COMPLETE Status</h3>
+                    <p><strong>Symptoms:</strong> Search returns UNABLE_TO_COMPLETE</p>
+                    <h4>Common Causes:</h4>
+                    <ul>
+                        <li>Court system offline or unavailable</li>
+                        <li>Jurisdiction doesn't offer online access</li>
+                        <li>Required identifiers missing (e.g., middle name for common names)</li>
+                        <li>Subject information doesn't match court records</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Best Practices -->
+            <section class="error-category">
+                <h2><i class="fas fa-star"></i> Error Handling Best Practices</h2>
+                
+                <div class="best-practices">
+                    <h3>1. Implement Retry Logic</h3>
+                    <pre><code class="language-javascript">async function apiRequestWithRetry(url, options, maxRetries = 3) {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (response.status === 429) {
+        // Rate limited - wait and retry
+        const resetTime = response.headers.get('X-RateLimit-Reset');
+        const waitTime = resetTime ? (resetTime * 1000 - Date.now()) : 60000;
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        continue;
+      }
+      
+      if (response.status >= 500 && i < maxRetries - 1) {
+        // Server error - exponential backoff
+        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000));
+        continue;
+      }
+      
+      return response;
+    } catch (error) {
+      if (i === maxRetries - 1) throw error;
+    }
+  }
+}</code></pre>
+                </div>
+                
+                <div class="best-practices">
+                    <h3>2. Log Error Details</h3>
+                    <p>Always log the complete error response including:</p>
+                    <ul>
+                        <li>Request ID (from headers)</li>
+                        <li>Error code and message</li>
+                        <li>Timestamp</li>
+                        <li>Request parameters (excluding sensitive data)</li>
+                    </ul>
+                </div>
+                
+                <div class="best-practices">
+                    <h3>3. Handle Specific Error Codes</h3>
+                    <pre><code class="language-javascript">function handleApiError(error) {
+  switch (error.code) {
+    case 'UNAUTHORIZED':
+      // Refresh token and retry
+      return refreshTokenAndRetry();
+      
+    case 'RATE_LIMITED':
+      // Queue request for later
+      return queueForRetry(error.details.resetAt);
+      
+    case 'INVALID_REQUEST':
+      // Log and alert - fix required
+      logError('Invalid request', error.details);
+      throw new ValidationError(error.message);
+      
+    default:
+      // Generic error handling
+      logError('API Error', error);
+      throw error;
+  }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Navigation -->
+            <div style="display: flex; justify-content: space-between; margin-top: 3rem;">
+                <a href="index.html" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Documentation
+                </a>
+                <a href="index.html#best-practices" class="btn-primary">
+                    Best Practices Guide <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

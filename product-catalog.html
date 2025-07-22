@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Catalog - InformData Connect API</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .catalog-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1e40af 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .product-category {
+            margin-bottom: 3rem;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-icon {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .product-item {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .product-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .product-code {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-family: 'Courier New', monospace;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            max-width: 800px;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        
+        .field-requirements {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content" style="margin-left: 0; max-width: 1400px; margin: 0 auto;">
+        <div style="padding: 2rem;">
+            <div class="catalog-header">
+                <h1 style="color: white; margin-bottom: 0.5rem;"><i class="fas fa-box"></i> Product Catalog</h1>
+                <p style="font-size: 1.25rem; opacity: 0.9;">Complete listing of all available screening products</p>
+            </div>
+
+            <!-- Criminal Background Checks -->
+            <section class="product-category">
+                <div class="category-header">
+                    <i class="fas fa-gavel category-icon"></i>
+                    <div>
+                        <h2 style="margin: 0;">Criminal Background Checks</h2>
+                        <p style="margin: 0; color: var(--text-secondary);">Court record searches for criminal history</p>
+                    </div>
+                </div>
+                
+                <div class="product-grid">
+                    <div class="product-item" onclick="showProductDetails('criminal')">
+                        <span class="product-code">CRIMINAL</span>
+                        <h3>County Criminal Search</h3>
+                        <p>Search criminal records at the county courthouse level</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Felony and misdemeanor records</li>
+                            <li>Configurable search years (1-10)</li>
+                            <li>Multiple scope options</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('criminal_federal')">
+                        <span class="product-code">CRIMINAL_FEDERAL</span>
+                        <h3>Federal Criminal Search</h3>
+                        <p>Search federal district court records</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>All US federal jurisdictions</li>
+                            <li>Federal crimes and violations</li>
+                            <li>Interstate crime coverage</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('criminal_international')">
+                        <span class="product-code">CRIMINAL_INTERNATIONAL</span>
+                        <h3>International Criminal Search</h3>
+                        <p>Criminal searches in international jurisdictions</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Country-specific searches</li>
+                            <li>Interpol database checks</li>
+                            <li>International court records</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('natcrim')">
+                        <span class="product-code">NATCRIM</span>
+                        <h3>National Criminal Database</h3>
+                        <p>Instant multi-jurisdictional database search</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Nationwide coverage</li>
+                            <li>Instant results</li>
+                            <li>Pointer for county searches</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Verification Services -->
+            <section class="product-category">
+                <div class="category-header">
+                    <i class="fas fa-check-circle category-icon"></i>
+                    <div>
+                        <h2 style="margin: 0;">Verification Services</h2>
+                        <p style="margin: 0; color: var(--text-secondary);">Confirm employment, education, and credentials</p>
+                    </div>
+                </div>
+                
+                <div class="product-grid">
+                    <div class="product-item" onclick="showProductDetails('employment_verification')">
+                        <span class="product-code">EMPLOYMENT_VERIFICATION</span>
+                        <h3>Employment Verification</h3>
+                        <p>Verify past and current employment</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Position and dates</li>
+                            <li>Salary verification</li>
+                            <li>Eligibility for rehire</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('education_verification')">
+                        <span class="product-code">EDUCATION_VERIFICATION</span>
+                        <h3>Education Verification</h3>
+                        <p>Confirm degrees and certifications</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Degree confirmation</li>
+                            <li>Enrollment dates</li>
+                            <li>GPA verification</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('license_verification')">
+                        <span class="product-code">LICENSE_VERIFICATION</span>
+                        <h3>Professional License Verification</h3>
+                        <p>Verify professional licenses and certifications</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>License status</li>
+                            <li>Expiration dates</li>
+                            <li>Disciplinary actions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('reference_verification')">
+                        <span class="product-code">REFERENCE_VERIFICATION</span>
+                        <h3>Reference Check</h3>
+                        <p>Contact and verify professional references</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Reference interviews</li>
+                            <li>Performance feedback</li>
+                            <li>Relationship verification</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Database & Registry Searches -->
+            <section class="product-category">
+                <div class="category-header">
+                    <i class="fas fa-database category-icon"></i>
+                    <div>
+                        <h2 style="margin: 0;">Database & Registry Searches</h2>
+                        <p style="margin: 0; color: var(--text-secondary);">Specialized database and registry checks</p>
+                    </div>
+                </div>
+                
+                <div class="product-grid">
+                    <div class="product-item" onclick="showProductDetails('ssn_trace')">
+                        <span class="product-code">SSN_TRACE</span>
+                        <h3>Social Security Number Trace</h3>
+                        <p>Validate SSN and associated addresses</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>SSN validation</li>
+                            <li>Address history</li>
+                            <li>Alias detection</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('nsor')">
+                        <span class="product-code">NSOR</span>
+                        <h3>Sex Offender Registry</h3>
+                        <p>Search national sex offender registries</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>All 50 states coverage</li>
+                            <li>Photo matching</li>
+                            <li>Offense details</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('watch_list')">
+                        <span class="product-code">WATCH_LIST_ONLY</span>
+                        <h3>Watch List Search</h3>
+                        <p>Government and sanctions watch lists</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>OFAC sanctions</li>
+                            <li>Terrorist watch lists</li>
+                            <li>Excluded parties</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('motor_vehicle')">
+                        <span class="product-code">MOTOR_VEHICLE_REPORT</span>
+                        <h3>Motor Vehicle Records</h3>
+                        <p>Driving history and violations</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>License status</li>
+                            <li>Traffic violations</li>
+                            <li>DUI/DWI records</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financial & Civil -->
+            <section class="product-category">
+                <div class="category-header">
+                    <i class="fas fa-balance-scale category-icon"></i>
+                    <div>
+                        <h2 style="margin: 0;">Financial & Civil Records</h2>
+                        <p style="margin: 0; color: var(--text-secondary);">Financial history and civil court records</p>
+                    </div>
+                </div>
+                
+                <div class="product-grid">
+                    <div class="product-item" onclick="showProductDetails('civil')">
+                        <span class="product-code">CIVIL</span>
+                        <h3>County Civil Search</h3>
+                        <p>Civil court records at county level</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Lawsuits and judgments</li>
+                            <li>Liens and evictions</li>
+                            <li>Civil disputes</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('credit_report')">
+                        <span class="product-code">CREDIT_REPORT</span>
+                        <h3>Credit Report</h3>
+                        <p>Consumer credit history</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Credit score</li>
+                            <li>Payment history</li>
+                            <li>Outstanding debts</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="product-item" onclick="showProductDetails('bankruptcy')">
+                        <span class="product-code">BANKRUPTCY_RECORDS</span>
+                        <h3>Bankruptcy Search</h3>
+                        <p>Federal bankruptcy filings</p>
+                        <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                            <li>Chapter 7, 11, 13</li>
+                            <li>Filing dates</li>
+                            <li>Discharge status</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Back Navigation -->
+            <div style="display: flex; justify-content: center; margin-top: 3rem;">
+                <a href="index.html" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Main Documentation
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="productModal" class="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Product Details</h2>
+                <button class="close-button" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script>
+        const productDetails = {
+            criminal: {
+                title: 'County Criminal Search',
+                code: 'CRIMINAL',
+                description: 'Comprehensive criminal record search at the county courthouse level. This is the most accurate and thorough criminal search available.',
+                fields: [
+                    { name: 'felonyYears', type: 'integer', required: true, values: '1-10', description: 'Number of years to search for felony records' },
+                    { name: 'felonyScope', type: 'string', required: true, values: 'STRICT_SCOPE, EXTENDED_SCOPE, BROAD_SCOPE', description: 'Geographic scope for felony search' },
+                    { name: 'misdemeanorYears', type: 'integer', required: true, values: '1-10', description: 'Number of years to search for misdemeanor records' },
+                    { name: 'misdemeanorScope', type: 'string', required: true, values: 'STRICT_SCOPE, EXTENDED_SCOPE, BROAD_SCOPE', description: 'Geographic scope for misdemeanor search' },
+                    { name: 'trafficLevel', type: 'string', required: false, values: 'NO_TRAFFIC, TRAFFIC_MISDEMEANORS_ONLY, ALL_TRAFFIC', description: 'Level of traffic violations to include' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "CRIM-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "CRIMINAL",
+                            felonyYears: 7,
+                            felonyScope: "STRICT_SCOPE",
+                            misdemeanorYears: 7,
+                            misdemeanorScope: "STRICT_SCOPE",
+                            trafficLevel: "NO_TRAFFIC"
+                        },
+                        jurisdiction: {
+                            county: "King",
+                            state: "WA",
+                            country: "United States"
+                        }
+                    }
+                }
+            },
+            employment_verification: {
+                title: 'Employment Verification',
+                code: 'EMPLOYMENT_VERIFICATION',
+                description: 'Verify employment history including positions held, dates of employment, salary information, and eligibility for rehire.',
+                fields: [
+                    { name: 'employer', type: 'string', required: true, description: 'Name of the employer' },
+                    { name: 'title', type: 'string', required: true, description: 'Job title or position' },
+                    { name: 'employedFrom', type: 'date', required: true, description: 'Employment start date' },
+                    { name: 'employedTo', type: 'date', required: false, description: 'Employment end date (leave empty if current)' },
+                    { name: 'address1', type: 'string', required: false, description: 'Employer street address' },
+                    { name: 'city', type: 'string', required: false, description: 'Employer city' },
+                    { name: 'state', type: 'string', required: false, description: 'Employer state' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "EMP-001",
+                        subject: {
+                            FirstName: "Jane",
+                            LastName: "Smith",
+                            Birthdate: "1985-05-15"
+                        },
+                        product: {
+                            category: "EMPLOYMENT_VERIFICATION"
+                        },
+                        employmentVerification: {
+                            employer: "Tech Corp Inc",
+                            title: "Senior Developer",
+                            employedFrom: "2020-01-15",
+                            employedTo: "2023-06-30",
+                            city: "Seattle",
+                            state: "WA"
+                        }
+                    }
+                }
+            },
+            ssn_trace: {
+                title: 'Social Security Number Trace',
+                code: 'SSN_TRACE',
+                description: 'Validate SSN and discover associated names and addresses. Useful for identifying all jurisdictions where criminal searches should be conducted.',
+                fields: [
+                    { name: 'ssn', type: 'string', required: true, description: 'Social Security Number (with or without dashes)' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "SSN-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01",
+                            ssn: "123-45-6789"
+                        },
+                        product: {
+                            category: "SSN_TRACE"
+                        }
+                    }
+                }
+            }
+        };
+
+        function showProductDetails(productKey) {
+            const product = productDetails[productKey];
+            if (!product) return;
+            
+            document.getElementById('modalTitle').innerHTML = `
+                <span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem; margin-right: 1rem;">${product.code}</span>
+                ${product.title}
+            `;
+            
+            document.getElementById('modalBody').innerHTML = `
+                <p style="font-size: 1.125rem; margin-bottom: 1.5rem;">${product.description}</p>
+                
+                ${product.fields ? `
+                    <h3>Configuration Parameters</h3>
+                    <table class="param-table">
+                        <thead>
+                            <tr>
+                                <th>Field</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Values/Format</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${product.fields.map(field => `
+                                <tr>
+                                    <td><code>${field.name}</code></td>
+                                    <td>${field.type}</td>
+                                    <td>${field.required ? '<span style="color: var(--danger-color);">Yes</span>' : 'No'}</td>
+                                    <td>${field.values || field.type}</td>
+                                    <td>${field.description}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                ` : ''}
+                
+                ${product.example ? `
+                    <h3 style="margin-top: 2rem;">Example Request</h3>
+                    <pre><code class="language-json">${JSON.stringify(product.example, null, 2)}</code></pre>
+                ` : ''}
+                
+                <div class="field-requirements">
+                    <h4><i class="fas fa-info-circle"></i> Additional Information</h4>
+                    <ul style="margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <li>All requests require authentication via JWT token</li>
+                        <li>Subject's FirstName, LastName, and Birthdate are always required</li>
+                        <li>Jurisdiction information may be required depending on the product</li>
+                        <li>Response time varies by product type and complexity</li>
+                    </ul>
+                </div>
+            `;
+            
+            document.getElementById('productModal').style.display = 'block';
+            Prism.highlightAllUnder(document.getElementById('modalBody'));
+        }
+        
+        function closeModal() {
+            document.getElementById('productModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
