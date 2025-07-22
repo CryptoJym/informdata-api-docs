@@ -366,6 +366,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
     <script>
         const productDetails = {
+            // Criminal Background Checks
             criminal: {
                 title: 'County Criminal Search',
                 code: 'CRIMINAL',
@@ -401,6 +402,79 @@
                     }
                 }
             },
+            criminal_federal: {
+                title: 'Federal Criminal Search',
+                code: 'CRIMINAL_FEDERAL',
+                description: 'Search federal district court records for federal crimes including interstate crimes, federal tax violations, and crimes on federal property.',
+                fields: [
+                    { name: 'felonyYears', type: 'integer', required: true, values: '1-10', description: 'Number of years to search' },
+                    { name: 'district', type: 'string', required: false, description: 'Specific federal district (optional)' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "FED-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "CRIMINAL_FEDERAL",
+                            felonyYears: 7
+                        }
+                    }
+                }
+            },
+            criminal_international: {
+                title: 'International Criminal Search',
+                code: 'CRIMINAL_INTERNATIONAL',
+                description: 'Criminal searches in international jurisdictions including Interpol database checks and country-specific court records.',
+                fields: [
+                    { name: 'countries', type: 'array', required: true, description: 'List of countries to search' },
+                    { name: 'yearsToSearch', type: 'integer', required: true, values: '1-10', description: 'Number of years to search' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "INTL-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "CRIMINAL_INTERNATIONAL",
+                            countries: ["UK", "Canada"],
+                            yearsToSearch: 7
+                        }
+                    }
+                }
+            },
+            natcrim: {
+                title: 'National Criminal Database',
+                code: 'NATCRIM',
+                description: 'Instant multi-jurisdictional database search. Good for identifying potential records that need county-level verification.',
+                fields: [
+                    { name: 'profile', type: 'string', required: true, values: 'standard, enhanced', description: 'Search profile depth' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "NATCRIM-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01",
+                            ssn: "123-45-6789"
+                        },
+                        product: {
+                            category: "NATCRIM"
+                        },
+                        natCrim: {
+                            profile: "standard"
+                        }
+                    }
+                }
+            },
+            // Verification Services
             employment_verification: {
                 title: 'Employment Verification',
                 code: 'EMPLOYMENT_VERIFICATION',
@@ -436,6 +510,96 @@
                     }
                 }
             },
+            education_verification: {
+                title: 'Education Verification',
+                code: 'EDUCATION_VERIFICATION',
+                description: 'Confirm degrees, certifications, enrollment dates, and graduation status from educational institutions.',
+                fields: [
+                    { name: 'schoolName', type: 'string', required: true, description: 'Name of the institution' },
+                    { name: 'degree', type: 'string', required: true, description: 'Degree or certificate earned' },
+                    { name: 'major', type: 'string', required: false, description: 'Field of study' },
+                    { name: 'graduationDate', type: 'date', required: false, description: 'Date of graduation' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "EDU-001",
+                        subject: {
+                            FirstName: "Jane",
+                            LastName: "Smith",
+                            Birthdate: "1985-05-15"
+                        },
+                        product: {
+                            category: "EDUCATION_VERIFICATION"
+                        },
+                        educationVerification: {
+                            schoolName: "State University",
+                            degree: "Bachelor of Science",
+                            major: "Computer Science",
+                            graduationDate: "2007-05-15"
+                        }
+                    }
+                }
+            },
+            license_verification: {
+                title: 'Professional License Verification',
+                code: 'LICENSE_VERIFICATION',
+                description: 'Verify professional licenses, certifications, and regulatory compliance status.',
+                fields: [
+                    { name: 'licenseType', type: 'string', required: true, description: 'Type of license (e.g., RN, MD, CPA)' },
+                    { name: 'licenseNumber', type: 'string', required: true, description: 'License number' },
+                    { name: 'issuingAuthority', type: 'string', required: true, description: 'Licensing board or authority' },
+                    { name: 'state', type: 'string', required: true, description: 'State of issuance' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "LIC-001",
+                        subject: {
+                            FirstName: "Jane",
+                            LastName: "Smith",
+                            Birthdate: "1985-05-15"
+                        },
+                        product: {
+                            category: "LICENSE_VERIFICATION"
+                        },
+                        licenseVerification: {
+                            licenseType: "RN",
+                            licenseNumber: "RN123456",
+                            issuingAuthority: "State Board of Nursing",
+                            state: "CA"
+                        }
+                    }
+                }
+            },
+            reference_verification: {
+                title: 'Reference Check',
+                code: 'REFERENCE_VERIFICATION',
+                description: 'Contact and verify professional references to confirm work history and performance.',
+                fields: [
+                    { name: 'referenceName', type: 'string', required: true, description: 'Name of reference' },
+                    { name: 'referencePhone', type: 'string', required: true, description: 'Phone number' },
+                    { name: 'referenceEmail', type: 'string', required: false, description: 'Email address' },
+                    { name: 'relationship', type: 'string', required: true, description: 'Professional relationship' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "REF-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "REFERENCE_VERIFICATION"
+                        },
+                        referenceVerification: {
+                            referenceName: "Jane Manager",
+                            referencePhone: "555-123-4567",
+                            relationship: "Former Supervisor"
+                        }
+                    }
+                }
+            },
+            // Database Searches
             ssn_trace: {
                 title: 'Social Security Number Trace',
                 code: 'SSN_TRACE',
@@ -454,6 +618,147 @@
                         },
                         product: {
                             category: "SSN_TRACE"
+                        }
+                    }
+                }
+            },
+            nsor: {
+                title: 'Sex Offender Registry',
+                code: 'NSOR',
+                description: 'Search national sex offender registries across all 50 states with photo matching capabilities.',
+                fields: [],
+                example: {
+                    order: {
+                        clientOrderId: "NSOR-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "NSOR"
+                        }
+                    }
+                }
+            },
+            watch_list: {
+                title: 'Watch List Search',
+                code: 'WATCH_LIST_ONLY',
+                description: 'Search government sanctions lists, terrorist watch lists, and excluded parties lists.',
+                fields: [],
+                example: {
+                    order: {
+                        clientOrderId: "WATCH-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "WATCH_LIST_ONLY"
+                        }
+                    }
+                }
+            },
+            motor_vehicle: {
+                title: 'Motor Vehicle Records',
+                code: 'MOTOR_VEHICLE_REPORT',
+                description: 'Comprehensive driving history including violations, suspensions, and DUI/DWI records.',
+                fields: [
+                    { name: 'driversLicenseNumber', type: 'string', required: true, description: 'Driver license number' },
+                    { name: 'state', type: 'string', required: true, description: 'State of issuance' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "MVR-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01",
+                            driversLicenseNumber: "D123456789"
+                        },
+                        product: {
+                            category: "MOTOR_VEHICLE_REPORT"
+                        },
+                        jurisdiction: {
+                            state: "CA"
+                        }
+                    }
+                }
+            },
+            // Financial & Civil
+            civil: {
+                title: 'County Civil Search',
+                code: 'CIVIL',
+                description: 'Search county civil court records for lawsuits, judgments, liens, and evictions.',
+                fields: [
+                    { name: 'yearsToSearch', type: 'integer', required: true, values: '1-10', description: 'Number of years to search' },
+                    { name: 'searchScope', type: 'string', required: true, values: 'STRICT_SCOPE, EXTENDED_SCOPE', description: 'Geographic scope' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "CIVIL-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01"
+                        },
+                        product: {
+                            category: "CIVIL",
+                            yearsToSearch: 7,
+                            searchScope: "STRICT_SCOPE"
+                        },
+                        jurisdiction: {
+                            county: "King",
+                            state: "WA",
+                            country: "United States"
+                        }
+                    }
+                }
+            },
+            credit_report: {
+                title: 'Credit Report',
+                code: 'CREDIT_REPORT',
+                description: 'Consumer credit history including score ranges, payment history, and outstanding debts.',
+                fields: [
+                    { name: 'ssn', type: 'string', required: true, description: 'Social Security Number' },
+                    { name: 'purpose', type: 'string', required: true, values: 'EMPLOYMENT, TENANT_SCREENING', description: 'Purpose of credit check' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "CREDIT-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01",
+                            ssn: "123-45-6789"
+                        },
+                        product: {
+                            category: "CREDIT_REPORT",
+                            purpose: "EMPLOYMENT"
+                        }
+                    }
+                }
+            },
+            bankruptcy: {
+                title: 'Bankruptcy Search',
+                code: 'BANKRUPTCY_RECORDS',
+                description: 'Search federal bankruptcy filings including Chapter 7, 11, and 13 cases.',
+                fields: [
+                    { name: 'yearsToSearch', type: 'integer', required: true, values: '1-10', description: 'Number of years to search' }
+                ],
+                example: {
+                    order: {
+                        clientOrderId: "BANK-001",
+                        subject: {
+                            FirstName: "John",
+                            LastName: "Doe",
+                            Birthdate: "1990-01-01",
+                            ssn: "123-45-6789"
+                        },
+                        product: {
+                            category: "BANKRUPTCY_RECORDS",
+                            yearsToSearch: 10
                         }
                     }
                 }
