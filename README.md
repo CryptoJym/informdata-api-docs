@@ -1,6 +1,6 @@
 # InformData Connect API Documentation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/jamesbrady/informdata-api-docs)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CryptoJym/informdata-api-docs)
 
 A comprehensive, interactive documentation website for the InformData Connect API, featuring 40+ background screening products and services.
 
@@ -56,7 +56,7 @@ informdata-api-docs/
 
 ```bash
 # Clone the repository
-git clone https://github.com/jamesbrady/informdata-api-docs.git
+git clone https://github.com/CryptoJym/informdata-api-docs.git
 cd informdata-api-docs
 
 # Install dependencies
@@ -71,7 +71,7 @@ npm run dev
 
 Deploy your own copy with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/jamesbrady/informdata-api-docs)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CryptoJym/informdata-api-docs)
 
 Or manually:
 
@@ -170,7 +170,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Documentation Issues**: [Open an issue](https://github.com/jamesbrady/informdata-api-docs/issues)
+- **Documentation Issues**: [Open an issue](https://github.com/CryptoJym/informdata-api-docs/issues)
 - **API Support**: Contact InformData support
 - **Deployment Help**: See [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)
 
